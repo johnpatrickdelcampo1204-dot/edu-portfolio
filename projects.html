@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Projects</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: transparent;
+      padding: 0;
+    }
+
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(130deg, #0f2b4d, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 8px solid #2563eb;
+      padding-left: 1.2rem;
+    }
+
+    button {
+      background: #2563eb;
+      border: none;
+      color: white;
+      padding: 0.7rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 60px;
+      cursor: pointer;
+      box-shadow: 0 8px 14px -6px #2563eb80;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+
+    button:hover {
+      background: #1e40af;
+      transform: scale(1.02);
+    }
+
+    #projectList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .project-card {
+      background: rgba(255,255,240,0.95);
+      border-radius: 1.8rem;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 12px 18px -10px rgba(0,0,0,0.1);
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 28px -12px rgba(0,0,0,0.2);
+    }
+
+    .project-card h3 {
+      font-size: 1.4rem;
+      color: #0f172a;
+      background: white;
+      padding: 1rem 1.5rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-left: 6px solid #2563eb;
+    }
+
+    .project-card p {
+      background: #f8fafc;
+      padding: 1rem 1.5rem;
+      margin: 0;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .project-card .card-action {
+      padding: 0.8rem 1.5rem 1.5rem;
+      background: #f8fafc;
+    }
+
+    .view-detail-btn {
+      background: #1e2f4b;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      border-radius: 40px;
+      box-shadow: none;
+      margin-bottom: 0;
+    }
+
+    /* Modal styles for projects */
+    .project-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+    }
+
+    .project-modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 2rem;
+      max-width: 800px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .close-project-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #64748b;
+    }
+
+    .close-project-modal:hover { color: #2563eb; }
+  </style>
+</head>
+<body>
+
+<h2><i class="fas fa-folder-open"></i> My Projects Hub</h2>
+<button onclick="toggleProjects()"><i class="fas fa-eye-slash" id="projectToggleIcon"></i> <span id="toggleBtnText">Hide projects</span></button>
+
+<div id="projectList">
+  <div class="project-card">
+    <h3><i class="fas fa-address-card"></i> About Me - Classic Bio</h3>
+    <p>Personal introduction, classes, favorite movies, moods & friends.</p>
+    <div class="card-action"><button class="view-detail-btn" onclick="openAboutMeProject()"><i class="fas fa-eye"></i> View Bio</button></div>
+  </div>
+
+  <div class="project-card">
+    <h3><i class="fas fa-globe"></i> Retro Static Webpage</h3>
+    <p>Classic HTML with background, colored fonts & table layout.</p>
+    <div class="card-action"><button class="view-detail-btn" onclick="openStaticWebpage()"><i class="fas fa-window-maximize"></i> View Retro</button></div>
+  </div>
+
+  <div class="project-card">
+    <h3><i class="fas fa-chalkboard-user"></i> IT Assistant + Quiz</h3>
+    <p>BSIT scripted assistant + 5-question tech quiz with timer.</p>
+    <div class="card-action"><button class="view-detail-btn" onclick="openITQuizTool()"><i class="fas fa-microphone-alt"></i> Launch Tool</button></div>
+  </div>
+
+  <div class="project-card">
+    <h3><i class="fas fa-book-open"></i> Brave Little Turtle Story</h3>
+    <p>Interactive 5-part children's story with morals & navigation.</p>
+    <div class="card-action"><button class="view-detail-btn" onclick="openStoryWebsite()"><i class="fas fa-frog"></i> Read Story</button></div>
+  </div>
+</div>
+
+<!-- About Me Modal -->
+<div id="aboutMeModal" class="project-modal">
+  <div class="project-modal-content">
+    <span class="close-project-modal" onclick="closeAboutMeModal()">&times;</span>
+    <h3>JOHN PATRICK M. DEL CAMPO</h3>
+    <p><b>Kind-hearted, appreciates simple things, loves giving.</b></p>
+    <hr style="margin: 10px 0">
+    <h4>MY CLASSES THIS SEMESTER</h4>
+    <ul><li>REED4, MS102, IM102, NET101, IPT101, PE4, GE9, F102, WS101</li></ul>
+    <h4>MY FAVORITE MOVIES</h4>
+    <ol><li>The Avengers</li><li>Fast and Furious</li><li>Home Alone 1&2</li></ol>
+    <h4>MY MOODS</h4>
+    <div><img src="happy.jpg" width="60" onerror="this.src='https://placehold.co/60x60/4caf50/white?text=😊'"> Happy &nbsp; <img src="sad.jpg" width="60" onerror="this.src='https://placehold.co/60x60/94a3b8/white?text=😢'"> Sad</div>
+    <h4>FUN FACTS ABOUT MY FRIENDS</h4>
+    <p><strong>Lester Azarcon</strong> - lends laptop, trustworthy.<br><strong>Lester Marc Cinense</strong> - good friend.</p>
+    <button onclick="closeAboutMeModal()" style="margin-top:1rem">Close</button>
+  </div>
+</div>
+
+<!-- Retro Static Modal -->
+<div id="staticWebpageModal" class="project-modal">
+  <div class="project-modal-content">
+    <span class="close-project-modal" onclick="closeStaticModal()">&times;</span>
+    <div style="background:#fff9ef;font-family:Arial;padding:1rem;border-radius:1rem">
+      <h2><font color="blue">About:</font> <font color="red">JOHN PATRICK M. DEL CAMPO</font></h2>
+      <p>Kind-hearted, appreciates simple things, loves giving.</p>
+      <h3><font color="magenta">Classes this sem</font></h3>
+      <ul><li>REED4, MS102, IM102, NET101, IPT101, PE4, GE9, F102, WS101</li></ul>
+      <h3><font color="magenta">Favorite Movies</font></h3>
+      <ol><li>The Avengers</li><li>Fast and Furious</li><li>Home Alone 1&2</li></ol>
+      <h3><font color="magenta">Moods</font></h3>
+      <table><tr><td><img src="happy.jpg" width="70" onerror="this.src='https://placehold.co/70x70/4caf50/white?text=HAPPY'"><br>Happy</td><td><img src="sad.jpg" width="70" onerror="this.src='https://placehold.co/70x70/94a3b8/white?text=SAD'"><br>Sad</td></tr></table>
+      <p><strong>Lester Azarcon</strong> - lends laptop<br><strong>Lester Marc Cinense</strong> - good friend</p>
+      <p>© 2026</p>
+    </div>
+    <button onclick="closeStaticModal()">Close</button>
+  </div>
+</div>
+
+<!-- IT Quiz Modal -->
+<div id="itQuizModal" class="project-modal">
+  <div class="project-modal-content">
+    <span class="close-project-modal" onclick="closeITQuizModal()">&times;</span>
+    <div id="itQuizDynamicContent"></div>
+  </div>
+</div>
+
+<!-- Story Modal -->
+<div id="storyModal" class="project-modal">
+  <div class="project-modal-content">
+    <span class="close-project-modal" onclick="closeStoryModal()">&times;</span>
+    <div id="storyDynamicContent"></div>
+  </div>
+</div>
+
+<script>
+// Toggle projects visibility
+let visible = true;
+function toggleProjects() {
+  let list = document.getElementById("projectList");
+  let icon = document.getElementById("projectToggleIcon");
+  let text = document.getElementById("toggleBtnText");
+  if (visible) {
+    list.style.display = "none";
+    icon.className = "fas fa-eye";
+    text.innerText = "Show projects";
+  } else {
+    list.style.display = "grid";
+    icon.className = "fas fa-eye-slash";
+    text.innerText = "Hide projects";
+  }
+  visible = !visible;
+}
+
+// Modal functions
+function openAboutMeProject() { document.getElementById('aboutMeModal').style.display = 'block'; }
+function closeAboutMeModal() { document.getElementById('aboutMeModal').style.display = 'none'; }
+function openStaticWebpage() { document.getElementById('staticWebpageModal').style.display = 'block'; }
+function closeStaticModal() { document.getElementById('staticWebpageModal').style.display = 'none'; }
+function closeITQuizModal() { document.getElementById('itQuizModal').style.display = 'none'; }
+function closeStoryModal() { document.getElementById('storyModal').style.display = 'none'; }
+
+// IT Quiz Tool
+function openITQuizTool() {
+  const container = document.getElementById('itQuizDynamicContent');
+  container.innerHTML = `<div style="padding:1rem"><h2>💻 IT Assistant & Quiz</h2><div id="assistArea"></div><div id="quizArea"></div></div>`;
+  
+  const assistDiv = document.getElementById('assistArea');
+  assistDiv.innerHTML = `<div style="background:#eef2ff;border-radius:1rem;padding:1rem"><b>📌 Assistant:</b><br><button onclick="window.showAssist(0)">Tuition Fee</button> <button onclick="window.showAssist(1)">Major Subjects</button> <button onclick="window.showAssist(2)">Career Paths</button> <p id="assistAns"></p><p id="assistProg">Progress: 0/3 answered</p></div>`;
+  
+  const quizDiv = document.getElementById('quizArea');
+  quizDiv.innerHTML = `<div style="margin-top:1rem"><h3>🖥️ Quiz (Timer: <span id="qt">30</span>s)</h3><form id="qf">${[1,2,3,4,5].map(i=>`<p>Q${i}: ${["HTML builds webpage structure?","Hard Drive stores data permanently?","LAN = Local Area Network?","Java is a programming language?","CPU = Central Processing Unit?"][i-1]}</p><input type="radio" name="q${i}" value="1"> True &nbsp;<input type="radio" name="q${i}" value="0"> False<br>`).join('')}<button type="button" onclick="submitQ()">Submit Quiz</button> <button onclick="resetQ()">Reset Quiz</button></form><div id="qr"></div></div>`;
+  
+  window.assistCount = 0;
+  window.assistTrack = [false, false, false];
+  window.showAssist = function(i) {
+    if (!window.assistTrack[i]) {
+      window.assistTrack[i] = true;
+      window.assistCount++;
+      let answers = ["Estimated tuition: ₱20,000-₱35,000 per semester", "Major subjects: Programming, Databases, Networking, Web Development", "Careers: Software Developer, Web Developer, Network Admin, IT Support"];
+      document.getElementById('assistAns').innerHTML = `Answer: ${answers[i]}`;
+      document.getElementById('assistProg').innerHTML = `Progress: ${window.assistCount}/3 answered`;
+    }
+  };
+  
+  let t = 30, interval;
+  function startT() { if (interval) clearInterval(interval); interval = setInterval(() => { t--; document.getElementById('qt').innerText = t; if (t <= 0) { clearInterval(interval); submitQ(); } }, 1000); }
+  
+  window.submitQ = function() { clearInterval(interval); let sc = 0; for (let i = 1; i <= 5; i++) { let radios = document.getElementsByName(`q${i}`); for (let r of radios) if (r.checked) sc += parseInt(r.value); } document.getElementById('qr').innerHTML = `🎯 Score: ${sc}/5`; };
+  
+  window.resetQ = function() { clearInterval(interval); document.getElementById('qf').reset(); document.getElementById('qr').innerHTML = ""; t = 30; document.getElementById('qt').innerText = t; startT(); };
+  
+  startT();
+  document.getElementById('itQuizModal').style.display = 'block';
+}
+
+// Story Website
+function openStoryWebsite() {
+  const container = document.getElementById('storyDynamicContent');
+  container.innerHTML = `<div id="storyHomeV" style="background:#e0f7fa;padding:2rem;text-align:center;border-radius:1rem"><h1>🐢 The Brave Little Turtle</h1><p>A story about courage, kindness, and friendship.</p><button onclick="startStory()">Start Reading</button></div><div id="storyPartsV" style="display:none"></div>`;
+  
+  const storyData = [
+    {title:"🐢 The Brave Little Turtle", content:"Once upon a time, in a quiet pond, there lived a little turtle named Timmy. Timmy was very shy and afraid of the other animals. He would always hide in his shell.", moral:"Being shy is okay, but trying to face your fears helps you grow.", bg:"#fff9e6"},
+    {title:"🦆 A Duckling in Trouble", content:"One day, Timmy saw a baby duckling stuck in some tall grass near the pond. The duckling was crying for help, but none of the other animals seemed to notice.", moral:"Always notice when someone needs help—you can make a difference.", bg:"#e6f7ff"},
+    {title:"💪 Timmy's Brave Journey", content:"Bravely, Timmy crawled out of his shell and slowly made his way through the grass toward the duckling. Each step made him more afraid, but he kept going.", moral:"Courage means continuing even when you are scared.", bg:"#f0fff4"},
+    {title:"🏞 Saving the Duckling", content:"Finally, Timmy reached the duckling and gently nudged it with his nose. The duckling happily followed him back to the safety of the pond.", moral:"Small acts of kindness can have a big impact.", bg:"#fffbe6"},
+    {title:"🏅 A Hero in the Pond", content:"The other animals cheered for Timmy and thanked him for his bravery. Timmy realized that even though he was small, he could still make a big difference.", moral:"Being brave and helpful earns respect and makes you a role model.", bg:"#fffde6"}
+  ];
+  
+  window.startStory = function() { document.getElementById('storyHomeV').style.display = 'none'; document.getElementById('storyPartsV').style.display = 'block'; showPart(0); };
+  window.showPart = function(idx) { 
+    let p = storyData[idx]; 
+    let prev = idx > 0 ? `<button onclick="showPart(${idx-1})">⬅️ Back</button>` : ''; 
+    let next = idx < 4 ? `<button onclick="showPart(${idx+1})">Next ➡️</button>` : `<button onclick="resetStory()">🏠 Home</button>`;
+    document.getElementById('storyPartsV').innerHTML = `<div style="background:${p.bg};padding:1.5rem;border-radius:1rem;text-align:center"><h2>${p.title}</h2><p style="margin:1rem 0">${p.content}</p><div style="border-left:5px solid #4da6ff;background:#f0f8ff;padding:10px;margin:15px auto;border-radius:8px"><em>💡 Moral: ${p.moral}</em></div><div>${prev} ${next}</div></div>`;
+  };
+  window.resetStory = function() { document.getElementById('storyHomeV').style.display = 'block'; document.getElementById('storyPartsV').style.display = 'none'; };
+  
+  document.getElementById('storyModal').style.display = 'block';
+}
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+  if (event.target.classList.contains('project-modal')) {
+    event.target.style.display = 'none';
+  }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById("projectList").style.display = "grid";
+});
+</script>
+</body>
+</html>
